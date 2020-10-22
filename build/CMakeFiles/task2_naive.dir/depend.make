@@ -4,6 +4,7 @@
 CMakeFiles/task2_naive.dir/project/naive_src/array.c.o: ../project/naive_include/array.h
 CMakeFiles/task2_naive.dir/project/naive_src/array.c.o: ../project/naive_src/array.c
 
+CMakeFiles/task2_naive.dir/project/naive_src/naive_sort.c.o: ../project/naive_include/array.h
 CMakeFiles/task2_naive.dir/project/naive_src/naive_sort.c.o: ../project/naive_include/naive_sort.h
 CMakeFiles/task2_naive.dir/project/naive_src/naive_sort.c.o: ../project/naive_src/naive_sort.c
 

@@ -10,39 +10,40 @@ Array* create_arr(size_t size) {
     }
     new_arr->arr = (int*)malloc(sizeof(int) * size);
     if (new_arr->arr == NULL) {
+        free(new_arr);
         return NULL;
     }
     new_arr->amount = 0;
     new_arr->size = size;
 }
 
-Array* create_arr_from_stream(FILE* stream) {
-    Array* new_arr = create_arr(DEFAULT_SIZE);
-    if (new_arr == NULL) {
-        return NULL;
+int fill_arr(FILE* stream, Array* array) {
+    if (array == NULL) {
+        return 1;
     }
-
-    while(fscanf(stream, "%d", &new_arr->arr[new_arr->amount]) != EOF) {
-        ++new_arr->amount;
-        if (new_arr->amount >= new_arr->size - 1) {
-            new_arr->arr = (int*)realloc(new_arr->arr, sizeof(int) * new_arr->size * 2);
-            if (new_arr->arr == NULL) {
-                return NULL;
+    while(fscanf(stream, "%d", &array->arr[array->amount]) != EOF) {
+        ++array->amount;
+        if (array->amount >= array->size - 1) {
+            array->arr = (int*)realloc(array->arr, sizeof(int) * array->size * 2);
+            if (array->arr == NULL) {
+                free(array);
+                return 1;
             }
-            new_arr->size *= 2;
+            array->size *= 2;
         } 
     }
-    return new_arr;
+    return 0;
 
 }
 
-int print_array(FILE* ostream, const Array* arr) {
-    if (arr == NULL) {
+int print_array(FILE* ostream, const Array* array) {
+    if (array == NULL) {
         return 1;
     }
-    for (size_t i = 0; i < arr->amount; ++i) {
-        fprintf(ostream, "%d ", arr->arr[i]);
+    for (size_t i = 0; i < array->amount; ++i) {
+        fprintf(ostream, "%d ", array->arr[i]);
     }
+    fprintf(ostream, "\n");
     return 0;
 }
 
@@ -52,8 +53,8 @@ int copy_arrays(Array* dst, const Array* src) {
 }
 
 
-void free_array(Array* arr) {
-    free(arr->arr);
-    free(arr);
+void free_array(Array* array) {
+    free(array->arr);
+    free(array);
     return;
 }

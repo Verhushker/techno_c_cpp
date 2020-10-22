@@ -12,7 +12,13 @@ stdlib.h
 stdio.h
 -
 
-/home/bruno/techno/ind_task2/project/naive_src/array.c
+../project/naive_include/naive_sort.h
 array.h
-/home/bruno/techno/ind_task2/project/naive_src/array.h
+../project/naive_include/array.h
+stdlib.h
+-
+
+/home/bruno/techno/ind_task2/project/naive_src/naive_sort.c
+naive_sort.h
+/home/bruno/techno/ind_task2/project/naive_src/naive_sort.h
 

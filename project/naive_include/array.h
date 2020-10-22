@@ -12,10 +12,10 @@ typedef struct Array {
 
 
 Array* create_arr(size_t size);
-Array* create_arr_from_stream(FILE* stream);
-int print_array(FILE* ostream, const Array* arr);
+int fill_arr(FILE* stream, Array* array);
+int print_array(FILE* ostream, const Array* array);
 int copy_arrays(Array* dst, const Array* src);
-void free_array(Array* arr);
+void free_array(Array* array);
 
 
 #endif  // array_h_
