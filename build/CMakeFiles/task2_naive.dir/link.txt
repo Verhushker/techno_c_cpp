@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtask2_naive.a  CMakeFiles/task2_naive.dir/project/naive_src/naive_sort.c.o CMakeFiles/task2_naive.dir/project/naive_src/array.c.o
+/usr/bin/ranlib libtask2_naive.a

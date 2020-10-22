@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../project/naive_include/array.h
+stdlib.h
+-
+stdio.h
+-
+
+../project/naive_include/naive_sort.h
+
+/home/bruno/techno/ind_task2/project/main.c
+naive_sort.h
+-
+array.h
+-
+
