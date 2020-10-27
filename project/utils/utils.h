@@ -1,5 +1,6 @@
-#ifndef array_h_
-#define array_h_
+#ifndef parallel_array_h_
+#define parallel_array_h_
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,8 +15,9 @@ typedef struct Array {
 Array* create_arr(size_t size);
 int fill_arr(FILE* stream, Array* array);
 int print_array(FILE* ostream, const Array* array);
-int copy_arrays(Array* dst, const Array* src);
+Array* copy_array(const Array* src, size_t begin, size_t end);
 void free_array(Array* array);
 
+void merge_sort(Array* array, size_t left, size_t right);
 
-#endif  // array_h_
+#endif  // parallel_array_h_
