@@ -30,28 +30,16 @@ int main(int argc, char** argv) {
         break;
     }
 
-    Array* arr = create_arr(10);
-    if (fill_arr(fp_in, arr)) {
+    Array* arr = create_arr_from_stream(fp_in);
+    if (arr == NULL) {
         free_array(arr);
         fclose(fp_in);
         fclose(fp_out);
         return 1;
     }
 
-  /*   int* shared_arr = mmap(NULL, arr->amount * sizeof(int),
-                           PROT_READ | PROT_WRITE,
-                           MAP_SHARED | MAP_ANONYMOUS, -1, 0); */
-   // memcpy(arr, arr, arr->amount * sizeof(int));
-
-   // Array* arr = create_arr(3);
-   /*  if (print_array(fp_out, arr)){
-        return 1;
-    }
-    printf("\n\n %zu \n%zu\n", arr->amount, arr->size); */
 
     pmerge_sort(arr, 0, arr->amount - 1);
-    //par_merge_sort(arr, 0, arr->amount - 1);
-    //merge_sort(arr, 0, arr->amount - 1);
 
     if (print_array(fp_out, arr)){
         free_array(arr);
@@ -60,7 +48,6 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-  //  printf("\n\nNumber of processors^%d\nAvailable processors^%d", get_nprocs_conf(), get_nprocs());
 
     free_array(arr);
     fclose(fp_in);

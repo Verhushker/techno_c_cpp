@@ -13,7 +13,7 @@ typedef struct Array {
 
 
 Array* create_arr(size_t size);
-int fill_arr(FILE* stream, Array* array);
+Array* create_arr_from_stream(FILE* stream);
 int print_array(FILE* ostream, const Array* array);
 Array* copy_array(const Array* src, size_t begin, size_t end);
 void free_array(Array* array);

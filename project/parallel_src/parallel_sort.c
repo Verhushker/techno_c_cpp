@@ -47,9 +47,9 @@ void par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
 
         close(lpipefd[0]);
         write(lpipefd[1], left_arr->arr, (middle - left + 1) * sizeof(int));
-        close(lpipefd[1]);
 
         free_array(left_arr);
+        free_array(array);
         exit(0);
     } else {
 
@@ -65,9 +65,9 @@ void par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
 
             close(rpipefd[0]);
             write(rpipefd[1], right_arr->arr, (right - middle) * sizeof(int));
-            close(rpipefd[1]);
 
             free_array(right_arr);
+            free_array(array);
             exit(0);
         }
 
@@ -94,9 +94,6 @@ void par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
     }
     
     merge(array, left, middle, right);
-
-    close(lpipefd[0]);
-    close(rpipefd[0]);
 
 
     free_array(tmp_left_arr);
