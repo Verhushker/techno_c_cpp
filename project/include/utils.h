@@ -18,6 +18,7 @@ int print_array(FILE* ostream, const Array* array);
 Array* copy_array(const Array* src, size_t begin, size_t end);
 void free_array(Array* array);
 
-void merge_sort(Array* array, size_t left, size_t right);
+void merge(Array* array, size_t left, size_t middle, size_t right);
+
 
 #endif  // parallel_array_h_

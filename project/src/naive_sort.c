@@ -1,6 +1,8 @@
 #include "naive_sort.h"
 
 
+
+
 void merge_sort(Array* array, size_t left, size_t right) {
     if (left >= right) {
         return;
@@ -13,3 +15,4 @@ void merge_sort(Array* array, size_t left, size_t right) {
 
     merge(array, left, middle, right);
 }
+
