@@ -4,65 +4,91 @@
 #define DEFAULT_SIZE 10
 
 
-Array* create_arr(size_t size) {
+Array* create_empty_arr(int* error_catcher, size_t size) {
     Array* new_arr = (Array*)malloc(sizeof(Array));
     if (new_arr == NULL) {
+        *error_catcher =  ALLOC_ERROR;
         return NULL;
     }
 
     new_arr->arr = (int*)malloc(sizeof(int) * size);
     if (new_arr->arr == NULL) {
         free(new_arr);
-        
+        *error_catcher = ALLOC_ERROR;
         return NULL;
     }
+
     new_arr->amount = 0;
     new_arr->size = size;
+        
+    return new_arr;
 }
 
-Array* create_arr_from_stream(FILE* stream) {
-    Array* new_arr = create_arr(DEFAULT_SIZE);
-    if (new_arr == NULL) {
+Array* create_arr(int* error_catcher, FILE* stream) {
+    if (error_catcher == NULL) {
+        return NULL;
+    }
+    if (stream == NULL) {
+        *error_catcher = INVALID_FILE;
+        return NULL;
+    }
+
+    Array* new_arr = create_empty_arr(error_catcher, DEFAULT_SIZE);
+    if (*error_catcher) {
         return NULL;
     }
 
     while(fscanf(stream, "%d", &new_arr->arr[new_arr->amount]) != EOF) {
         ++new_arr->amount;
+
         if (new_arr->amount >= new_arr->size - 1) {
             new_arr->arr = (int*)realloc(new_arr->arr, sizeof(int) * new_arr->size * 2);
             if (new_arr->arr == NULL) {
                 free(new_arr);
+                *error_catcher = ALLOC_ERROR;
                 return NULL;
             }
             new_arr->size *= 2;
         } 
     }
+
     return new_arr;
 
 }
 
 int print_array(FILE* ostream, const Array* array) {
-    if (array == NULL) {
-        return 1;
+    if (ostream == NULL) {
+        return INVALID_FILE;
+    }
+    if (array == NULL || array->arr == NULL) {
+        return INVALID_INPUT_ARRAY;
     }
     for (size_t i = 0; i < array->amount; ++i) {
-        fprintf(ostream, "%d ", array->arr[i]);
+        if (fprintf(ostream, "%d ", array->arr[i]) < 0) {
+            return PRINT_ERROR;
+        }
     }
     fprintf(ostream, "\n");
-    return 0;
+    return SUCCESS;
 }
 
 
-Array* copy_array(const Array* src, size_t begin, size_t end) {
+Array* create_copy_array(const Array* src, int* error_catcher, size_t begin, size_t end) {
     if(src == NULL || src->arr == NULL) {
+        *error_catcher = INVALID_INPUT_ARRAY;
         return NULL;
     }
-    Array* copy = create_arr(end - begin + 1);
-    for(size_t i = 0; i <= end - begin; ++i) {
-            copy->arr[i] = src->arr[begin + i];
-            ++copy->amount;
+    Array* new_arr = create_empty_arr(error_catcher, end - begin + 1);
+
+    if (*error_catcher) {
+        return NULL;
     }
-    return copy;
+    for(size_t i = 0; i <= end - begin; ++i) {
+            new_arr->arr[i] = src->arr[begin + i];
+            ++new_arr->amount;
+    }
+    
+    return new_arr;
 }
 
 
@@ -73,13 +99,22 @@ void free_array(Array* array) {
 }
 
 
-void merge(Array* array, size_t left, size_t middle, size_t right) {
+int merge(Array* array, size_t left, size_t middle, size_t right) {
     size_t i = 0, j = 0, k = left;
     size_t size_left = middle - left + 1;
     size_t size_right = right - middle;
 
-    Array* left_array = create_arr(size_left);
-    Array* right_array = create_arr(size_right);
+
+    int error_catcher = SUCCESS;
+
+    Array* left_array = create_empty_arr(&error_catcher, size_left);
+    if (error_catcher) {
+        return error_catcher;
+    }
+    Array* right_array = create_empty_arr(&error_catcher, size_right);
+    if (error_catcher) {
+        return error_catcher;
+    }
 
     for (size_t i1 = 0; i1 < size_left; ++i1) {
         left_array->arr[i1] = array->arr[left + i1];
@@ -115,4 +150,40 @@ void merge(Array* array, size_t left, size_t middle, size_t right) {
 
     free_array(left_array);
     free_array(right_array);
+    return SUCCESS;
+}
+
+void handle_errors(int error) {
+    switch (error)
+    {
+    case SUCCESS :
+        break;
+    case INVALID_FILE :
+        fprintf(stderr, "\nInvalid file\n");
+        break;
+    case  INVALID_INPUT_ARRAY:
+        fprintf(stderr, "\nInvalid input array\n");
+        break;
+    case  WRONG_INPUT:
+        fprintf(stderr, "\nWrong input\n");
+        break;
+    case  ALLOC_ERROR:
+        fprintf(stderr, "\nAlloc error\n");
+        break;
+    case  PRINT_ERROR:
+        fprintf(stderr, "\nPrint error\n");
+        break;
+    case  PIPE_FAILED:
+        fprintf(stderr, "\nPipe failed\n");
+        break;
+    case  CLOSE_FAILURE:
+        fprintf(stderr, "\nClose failure\n");
+        break;
+    case  READ_FAILURE:
+        fprintf(stderr, "\nRead failure\n");
+        break;
+    default:
+        fprintf(stderr, "\nUnknown error\n");
+        break;
+    }
 }
