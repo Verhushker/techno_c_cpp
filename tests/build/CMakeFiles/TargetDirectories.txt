@@ -1,0 +1,3 @@
+/home/bruno/techno/ind_task2/project/tests/build/CMakeFiles/rebuild_cache.dir
+/home/bruno/techno/ind_task2/project/tests/build/CMakeFiles/test.dir
+/home/bruno/techno/ind_task2/project/tests/build/CMakeFiles/edit_cache.dir

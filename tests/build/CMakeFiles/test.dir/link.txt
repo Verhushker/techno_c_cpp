@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/test.dir/home/bruno/techno/ind_task2/project/src/main.c.o CMakeFiles/test.dir/home/bruno/techno/ind_task2/project/src/naive_sort.c.o CMakeFiles/test.dir/home/bruno/techno/ind_task2/project/src/parallel_sort.c.o CMakeFiles/test.dir/home/bruno/techno/ind_task2/project/src/utils.c.o  -o test 
