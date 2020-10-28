@@ -1,0 +1,23 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: install linters
+        run: sudo apt-get install -y cppcheck
+        
+      - name: install valgrind
+        run: sudo apt install valgrind
+        
+      - name: install gcovr and lcov
+        run: |
+          sudo apt install gcovr
+          sudo apt install lcov
+          
+      - name: run linters
+        run: cd src && cppcheck *.c
