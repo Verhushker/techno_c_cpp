@@ -20,4 +20,4 @@ jobs:
           sudo apt install lcov
           
       - name: run linters
-        run: cd src && cppcheck *.c
+        run: cd project/src && cppcheck *.c
