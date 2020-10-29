@@ -5,13 +5,17 @@
 
 
 Array* create_empty_arr(int* error_catcher, size_t size) {
-    Array* new_arr = (Array*)malloc(sizeof(Array));
+    Array* new_arr = NULL;
+    new_arr = (Array*)malloc(sizeof(Array));
+    //memset(new_arr, 0, sizeof(Array));
     if (new_arr == NULL) {
         *error_catcher =  ALLOC_ERROR;
         return NULL;
     }
 
-    new_arr->arr = (int*)malloc(sizeof(int) * size);
+    new_arr->arr = (int*)calloc(sizeof(int), size);
+    //memset(new_arr, 0, sizeof(Array));
+
     if (new_arr->arr == NULL) {
         free(new_arr);
         *error_catcher = ALLOC_ERROR;
@@ -63,7 +67,7 @@ int print_array(FILE* ostream, const Array* array) {
     if (array == NULL || array->arr == NULL) {
         return INVALID_INPUT_ARRAY;
     }
-    for (size_t i = 0; i < array->amount; ++i) {
+    for (size_t i = 0; i < array->amount - 1; ++i) {
         if (fprintf(ostream, "%d ", array->arr[i]) == FAILURE) {
             return PRINT_ERROR;
         }
