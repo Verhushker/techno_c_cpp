@@ -19,5 +19,29 @@ jobs:
           sudo apt install gcovr
           sudo apt install lcov
           
-      - name: run linters
-        run: cd project/src && cppcheck *.c
+      - name: run cppcheck
+        run: cd src && cppcheck *.c
+      
+      - name: build naive lib
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+          
+      - name: test naive lib
+        run: |
+          cd build
+          valgrind --leak-check=full src/main.out ../many_nums.txt ../out.txt
+        
+      - name: build parallel lib
+        run: |
+          rm -r build/*
+          cd build
+          cmake -DPARALLEL=ON ..
+          make
+          
+      - name: test parallel lib
+        run: |
+          cd build
+          valgrind --leak-check=full src/main.out ../many_nums.txt ../out.txt
