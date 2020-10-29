@@ -13,11 +13,6 @@ jobs:
         
       - name: install valgrind
         run: sudo apt install valgrind
-        
-      - name: install gcovr and lcov
-        run: |
-          sudo apt install gcovr
-          sudo apt install lcov
           
       - name: run cppcheck
         run: cd src && cppcheck *.c

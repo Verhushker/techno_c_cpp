@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/main.out.dir/project/main.c.o  -o main.out  libtask2_naive.a 

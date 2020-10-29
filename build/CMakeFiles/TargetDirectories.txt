@@ -1,6 +1,0 @@
-/home/bruno/techno/ind_task2/build/CMakeFiles/rebuild_cache.dir
-/home/bruno/techno/ind_task2/build/CMakeFiles/main.out.dir
-/home/bruno/techno/ind_task2/build/CMakeFiles/edit_cache.dir
-/home/bruno/techno/ind_task2/build/CMakeFiles/task2_naive.dir
-/home/bruno/techno/ind_task2/build/project/naive_src/CMakeFiles/rebuild_cache.dir
-/home/bruno/techno/ind_task2/build/project/naive_src/CMakeFiles/edit_cache.dir
