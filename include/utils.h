@@ -12,7 +12,8 @@ typedef struct Array {
 } Array;
 
 enum Errors {
-    SUCCESS = 0,
+    FAILURE = -1,
+    SUCCESS,
     INVALID_FILE,
     INVALID_INPUT_ARRAY,
     WRONG_INPUT,

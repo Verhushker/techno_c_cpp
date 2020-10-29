@@ -13,11 +13,13 @@ int merge_sort(Array* array, size_t left, size_t right) {
 
     size_t middle = (left + right) / 2;
 
-    int error_catcher = SUCCESS;
-    if (error_catcher = merge_sort(array, left, middle)) {
+    int error_catcher = merge_sort(array, left, middle);
+    if (error_catcher) {
         return error_catcher;
     }
-    if (error_catcher = merge_sort(array, middle + 1, right)) {
+
+    error_catcher = merge_sort(array, middle + 1, right);
+    if (error_catcher) {
         return error_catcher;
     }
 

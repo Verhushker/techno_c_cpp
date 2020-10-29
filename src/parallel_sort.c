@@ -1,5 +1,4 @@
 #include "parallel_sort.h"
-#include "naive_sort.h"
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/sysinfo.h>
@@ -18,20 +17,25 @@ static int naive_merge_sort(Array* array, size_t left, size_t right) {
 
     size_t middle = (left + right) / 2;
 
-    int error_catcher = SUCCESS;
-    if (error_catcher = naive_merge_sort(array, left, middle)) {
-        return error_catcher;
-    }
-    if (error_catcher = naive_merge_sort(array, middle + 1, right)) {
+    int error_catcher = naive_merge_sort(array, left, middle);
+    if (error_catcher) {
         return error_catcher;
     }
 
-    merge(array, left, middle, right);
+    error_catcher = naive_merge_sort(array, middle + 1, right);
+    if (error_catcher) {
+        return error_catcher;
+    }
+
+    error_catcher = merge(array, left, middle, right);
+    if (error_catcher) {
+        return error_catcher;
+    }
     return SUCCESS;
 }
 
 
-int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
+static int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
     if (left >= right) {
         return SUCCESS;
     }
@@ -50,14 +54,12 @@ int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
     }
 
     int lpipefd[2];
-    if(pipe(lpipefd) == -1) {
+    if(pipe(lpipefd) == FAILURE) {
         return PIPE_FAILED;
-        //exit(EXIT_FAILURE);
     }
     int rpipefd[2];
-    if(pipe(rpipefd) == -1) {
+    if(pipe(rpipefd) == FAILURE) {
         return PIPE_FAILED;
-        //exit(EXIT_FAILURE);
     }
 
 
@@ -66,8 +68,7 @@ int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
     pid_t left_pid = 0, right_pid = 0;
 
     left_pid = fork();
-    if (left_pid == -1) {
-        fprintf(stderr, "Fork error");
+    if (left_pid == FAILURE) {
         exit(EXIT_FAILURE);
     }  else if (left_pid == 0) {
         (*nproc) += 2;
@@ -82,7 +83,9 @@ int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
             return error_catcher;
         }
         
-        close(lpipefd[0]);
+        if(close(lpipefd[0])) {
+            return CLOSE_FAILURE;
+        }
         write(lpipefd[1], left_arr->arr, (middle - left + 1) * sizeof(int));
 
         free_array(left_arr);
@@ -90,8 +93,7 @@ int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
         exit(EXIT_SUCCESS);
     } else {
         right_pid = fork();
-        if (right_pid == -1) {
-            fprintf(stderr, "Fork error");
+        if (right_pid == FAILURE) {
             exit(EXIT_FAILURE);
         } else if (right_pid == 0) {
             (*nproc) += 2;
@@ -106,7 +108,9 @@ int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
                 return error_catcher;
             }
 
-            close(rpipefd[0]);
+            if(close(rpipefd[0])) {
+                return CLOSE_FAILURE;
+            }
             write(rpipefd[1], right_arr->arr, (right - middle) * sizeof(int));
 
             free_array(right_arr);
@@ -166,7 +170,7 @@ int par_merge_sort(Array* array, size_t left, size_t right, int* nproc) {
 }
 
 
-int pmerge_sort(Array* array, size_t left, size_t right) {
+int merge_sort(Array* array, size_t left, size_t right) {
     int* nproc = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     *nproc = 1;
     
@@ -176,4 +180,6 @@ int pmerge_sort(Array* array, size_t left, size_t right) {
         return error_catcher;
     }
     munmap(nproc, sizeof(int));
+
+    return SUCCESS;
 }

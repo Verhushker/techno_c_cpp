@@ -1,5 +1,5 @@
-#include "utils.h" 
-
+#include "utils.h"
+#include <string.h>
 
 #define DEFAULT_SIZE 10
 
@@ -64,7 +64,7 @@ int print_array(FILE* ostream, const Array* array) {
         return INVALID_INPUT_ARRAY;
     }
     for (size_t i = 0; i < array->amount; ++i) {
-        if (fprintf(ostream, "%d ", array->arr[i]) < 0) {
+        if (fprintf(ostream, "%d ", array->arr[i]) == FAILURE) {
             return PRINT_ERROR;
         }
     }
@@ -78,7 +78,14 @@ Array* create_copy_array(const Array* src, int* error_catcher, size_t begin, siz
         *error_catcher = INVALID_INPUT_ARRAY;
         return NULL;
     }
-    Array* new_arr = create_empty_arr(error_catcher, end - begin + 1);
+    Array* new_arr = NULL;
+
+    //memset(new_arr, 0, sizeof(Array));
+
+    new_arr = create_empty_arr(error_catcher, end - begin + 1);
+
+    //memset(new_arr->arr, 0, sizeof(new_arr->size * sizeof(int)));
+    /* memset(new_arr, 0, sizeof(Array)); */
 
     if (*error_catcher) {
         return NULL;
